@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>BIA Gadgets | Premium Tech Emporium</title>
-    <!-- Google Fonts: Beachy & modern vibe -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (free icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -32,6 +30,7 @@
             --border-glow: #4e555e;
         }
 
+        /* Navbar Styling */
         .navbar {
             background: #1e2227;
             padding: 1rem 2rem;
@@ -58,6 +57,8 @@
             text-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
         .logo i {
+            background: none;
+            -webkit-background-clip: unset;
             color: #ffb347;
             margin-right: 6px;
         }
@@ -80,9 +81,6 @@
             color: white;
             outline: none;
         }
-        .search-bar input::placeholder {
-            color: #9aa9b9;
-        }
         .search-bar button {
             background: #ffb347;
             border: none;
@@ -92,9 +90,7 @@
             font-size: 1.2rem;
             transition: 0.2s;
         }
-        .search-bar button:hover {
-            background: #ffa01e;
-        }
+        .search-bar button:hover { background: #ffa01e; }
 
         .cart-icon {
             font-size: 1.5rem;
@@ -104,11 +100,9 @@
             border-radius: 40px;
             font-weight: 500;
         }
-        .cart-icon i {
-            margin-right: 8px;
-            color: #ffb347;
-        }
+        .cart-icon i { margin-right: 8px; color: #ffb347; }
 
+        /* Category Tabs */
         .categories {
             display: flex;
             flex-wrap: wrap;
@@ -135,9 +129,6 @@
             align-items: center;
             gap: 8px;
         }
-        .cat-btn i {
-            font-size: 1rem;
-        }
         .cat-btn.active, .cat-btn:hover {
             background: #ffb347;
             color: #1e2227;
@@ -145,14 +136,13 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
+        /* Product Section */
         .products-section {
             display: none;
             padding: 2rem 2rem;
             animation: fadeIn 0.3s ease;
         }
-        .products-section.active-section {
-            display: block;
-        }
+        .products-section.active-section { display: block; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px);}
             to { opacity: 1; transform: translateY(0);}
@@ -201,33 +191,11 @@
             object-fit: contain;
             filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.3));
         }
-        .product-info {
-            padding: 1rem 1.2rem 1.2rem;
-            flex: 1;
-        }
-        .product-name {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 0.4rem;
-            color: white;
-        }
-        .product-brand {
-            font-size: 0.75rem;
-            color: #ffb89a;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-        .product-specs {
-            font-size: 0.75rem;
-            color: #cbd5e1;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
+        .product-info { padding: 1rem 1.2rem 1.2rem; flex: 1; }
+        .product-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; color: white; }
+        .product-brand { font-size: 0.75rem; color: #ffb89a; text-transform: uppercase; margin-bottom: 8px; }
+        .product-specs { font-size: 0.75rem; color: #cbd5e1; margin-bottom: 1rem; line-height: 1.3; }
+
         .order-btn {
             background: #ffb347;
             border: none;
@@ -242,7 +210,9 @@
             gap: 10px;
             color: #1e2227;
             cursor: pointer;
+            transition: 0.2s;
         }
+        .order-btn:hover { background: #ffa01a; transform: scale(0.98); }
 
         .footer {
             text-align: center;
@@ -253,9 +223,141 @@
             font-size: 0.8rem;
             color: #a1abb5;
         }
+        .no-results { text-align: center; padding: 3rem; font-size: 1.2rem; color: #ccc; }
+
+        @media (max-width: 700px) {
+            .navbar { flex-direction: column; align-items: stretch; }
+            .categories { top: 110px; }
+        }
     </style>
 </head>
 <body>
-<!-- (Rest of your HTML + JS remains exactly as you sent) -->
+
+<header>
+    <div class="navbar">
+        <div class="logo"><i class="fas fa-microchip"></i> BIA Gadgets</div>
+        <div class="search-bar">
+            <input type="text" id="globalSearchInput" placeholder="Search gadgets...">
+            <button id="globalSearchBtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="cart-icon"><i class="fab fa-whatsapp"></i> Order Now</div>
+    </div>
+    <div class="categories" id="categoryTabs">
+        <button class="cat-btn active" data-cat="phones"><i class="fas fa-mobile-alt"></i> Phones</button>
+        <button class="cat-btn" data-cat="earbuds"><i class="fas fa-headphones"></i> Earbuds</button>
+        <button class="cat-btn" data-cat="powerbanks"><i class="fas fa-battery-full"></i> Power Banks</button>
+        <button class="cat-btn" data-cat="chargers"><i class="fas fa-plug"></i> Chargers</button>
+        <button class="cat-btn" data-cat="routers"><i class="fas fa-wifi"></i> WiFi Routers</button>
+        <button class="cat-btn" data-cat="solar"><i class="fas fa-solar-panel"></i> Solar</button>
+        <button class="cat-btn" data-cat="laptops"><i class="fas fa-laptop"></i> Laptops</button>
+        <button class="cat-btn" data-cat="headsets"><i class="fas fa-music"></i> Audio</button>
+    </div>
+</header>
+
+<main>
+    <div id="phones" class="products-section active-section"></div>
+    <div id="earbuds" class="products-section"></div>
+    <div id="powerbanks" class="products-section"></div>
+    <div id="chargers" class="products-section"></div>
+    <div id="routers" class="products-section"></div>
+    <div id="solar" class="products-section"></div>
+    <div id="laptops" class="products-section"></div>
+    <div id="headsets" class="products-section"></div>
+</main>
+
+<footer class="footer">
+    <p>© 2025 BIA Gadgets | Premium Quality, Fast Delivery</p>
+</footer>
+
+<script>
+    const brands = {
+        phones: ["iPhone", "Samsung", "Tecno", "Infinix", "Redmi", "Pixel"],
+        earbuds: ["Oraimo", "New Age", "Apple", "Samsung", "JBL"],
+        powerbanks: ["Linco", "Oraimo", "New Age", "Anker", "Baseus"],
+        chargers: ["Anker", "Samsung", "Apple", "Baseus", "Oraimo"],
+        routers: ["TP-Link", "D-Link", "Tenda", "Huawei", "Xiaomi"],
+        solar: ["Renogy", "Jackery", "EcoFlow", "Bluetti"],
+        laptops: ["HP", "Dell", "Lenovo", "ASUS", "MacBook"],
+        headsets: ["Sony", "JBL", "Bose", "Sennheiser", "Beats"]
+    };
+
+    function randomSpec(cat) {
+        const specs = {
+            phones: "128GB ROM · 8GB RAM · 50MP Camera",
+            earbuds: "Bluetooth 5.3 · 40H Playtime · ANC",
+            powerbanks: "20,000mAh · 22.5W Fast Charge",
+            chargers: "65W GaN · PD Fast Charge · Type-C",
+            routers: "WiFi 6 · Dual Band · 3000Mbps",
+            solar: "200W Panel · Portable · High Efficiency",
+            laptops: "16GB RAM · 512GB SSD · Intel i7",
+            headsets: "Hi-Res Audio · 50H Battery · MP3 Support"
+        };
+        return specs[cat] || "Premium Tech Specs";
+    }
+
+    const productDB = {};
+    Object.keys(brands).forEach(cat => {
+        productDB[cat] = Array.from({length: 32}, (_, i) => ({
+            id: `${cat}-${i}`,
+            name: `${brands[cat][i % brands[cat].length]} Gen-${i + 1}`,
+            brand: brands[cat][i % brands[cat].length],
+            specs: randomSpec(cat),
+            imgUrl: `https://picsum.photos/id/${(i * 10 + 50) % 500}/300/200`,
+            category: cat
+        }));
+    });
+
+    function renderCategory(categoryId, searchTerm = "") {
+        const container = document.getElementById(categoryId);
+        let products = productDB[categoryId];
+        if (searchTerm) {
+            products = products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        }
+        
+        if (products.length === 0) {
+            container.innerHTML = `<div class="no-results">No gadgets found.</div>`;
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="section-title">${categoryId.toUpperCase()}</div>
+            <div class="product-grid">
+                ${products.map(p => `
+                    <div class="product-card">
+                        <div class="product-img"><img src="${p.imgUrl}" alt="${p.name}"></div>
+                        <div class="product-info">
+                            <div class="product-name">${p.name}</div>
+                            <div class="product-brand">${p.brand}</div>
+                            <div class="product-specs">${p.specs}</div>
+                            <button class="order-btn" onclick="order('${p.name}')"><i class="fab fa-whatsapp"></i> ORDER NOW</button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>`;
+    }
+
+    function order(name) {
+        const msg = encodeURIComponent(`Hi BIA Gadgets, I'm interested in the ${name}. Is it available?`);
+        window.open(`https://wa.me/2349121843325?text=${msg}`, '_blank');
+    }
+
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.products-section').forEach(s => s.classList.remove('active-section'));
+            const cat = btn.dataset.cat;
+            document.getElementById(cat).classList.add('active-section');
+            renderCategory(cat);
+        });
+    });
+
+    document.getElementById('globalSearchBtn').onclick = () => {
+        const active = document.querySelector('.cat-btn.active').dataset.cat;
+        renderCategory(active, document.getElementById('globalSearchInput').value);
+    };
+
+    renderCategory('phones');
+</script>
 </body>
 </html>
