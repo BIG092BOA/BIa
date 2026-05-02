@@ -2,154 +2,267 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BIA Gadgets | Premium Tech Emporium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
-        body { background-color: #2c2f33; color: #f0f3f5; scroll-behavior: smooth; }
-        :root { --bg-main: #1e2227; --card-bg: #3a3f47; --accent: #ffb347; }
-
-        .navbar {
-            background: var(--bg-main); padding: 1rem 2rem; display: flex; flex-wrap: wrap;
-            align-items: center; justify-content: space-between; gap: 1rem;
-            position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #414a54;
+        :root {
+            --primary: #ffb347; /* Beachy Orange Accent */
+            --bg: #2c2f33; /* Deep Grey Theme */
+            --card-bg: #3a3f47;
+            --text-main: #ffffff;
+            --text-sub: #b0bec5;
+            --accent-hover: #ff9f1c;
         }
-        .logo { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #FFF, #ffb347); -webkit-background-clip: text; color: transparent; }
-        
-        .search-bar { flex: 1; max-width: 500px; display: flex; background: #2f353d; border-radius: 60px; overflow: hidden; border: 1px solid #5f6a76; }
-        .search-bar input { flex: 1; background: transparent; border: none; padding: 12px 20px; color: white; outline: none; }
-        .search-bar button { background: #ffb347; border: none; padding: 0 22px; cursor: pointer; color: #1e2227; }
 
-        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; padding: 1rem; background: #23272e; position: sticky; top: 72px; z-index: 99; border-bottom: 1px solid #3b424b; }
-        .cat-btn { background: #31373f; border: none; padding: 10px 20px; border-radius: 40px; color: #eef2f5; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .cat-btn.active, .cat-btn:hover { background: #ffb347; color: #1e2227; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .products-section { display: none; padding: 2rem; animation: fadeIn 0.4s ease; }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Sticky Header & Navbar */
+        header {
+            background: #1e2227;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #414a54;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #FFFFFF, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Pinterest Style Category Bar */
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: #23272e;
+            overflow-x: auto;
+            white-space: nowrap;
+            position: sticky;
+            top: 125px; /* Below Header */
+            z-index: 999;
+            scrollbar-width: none;
+        }
+        .categories::-webkit-scrollbar { display: none; }
+
+        .cat-btn {
+            background: #31373f;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .cat-btn.active, .cat-btn:hover {
+            background: var(--primary);
+            color: #1e2227;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .products-section { display: none; animation: fadeIn 0.5s ease; }
         .products-section.active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2rem; }
-        .product-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid #525c68; transition: 0.3s; }
-        .product-card:hover { transform: translateY(-5px); border-color: #ffb347; }
-        
-        .product-img { background: #fff; height: 200px; display: flex; align-items: center; justify-content: center; padding: 10px; }
-        .product-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .product-info { padding: 1.5rem; }
-        .product-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 5px; color: #fff; }
-        .product-brand { color: #ffb347; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px; font-weight: bold; }
-        .product-specs { font-size: 0.85rem; color: #cbd5e1; margin-bottom: 1.5rem; height: 40px; overflow: hidden; }
+        /* The Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px;
+        }
 
-        .order-btn { background: #ffb347; border: none; width: 100%; padding: 12px; border-radius: 40px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: #1e2227; }
-        .footer { text-align: center; padding: 3rem; background: #1e2227; color: #a1abb5; border-top: 1px solid #414a54; }
+        /* Product Card */
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 1px solid #4e555e;
+            position: relative;
+        }
 
-        @media (max-width: 700px) { .navbar { flex-direction: column; } .categories { top: 120px; } }
+        .image-wrapper {
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff; /* White background for the "Pinterest Cutout" look */
+            border-radius: 18px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .product-card img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .product-card:hover img { transform: scale(1.1); }
+
+        .product-info { text-align: center; }
+        .product-tag { font-size: 0.7rem; text-transform: uppercase; color: var(--primary); font-weight: 700; margin-bottom: 5px; display: block; }
+        .product-name { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; }
+
+        .order-btn {
+            background: var(--primary);
+            color: #1e2227;
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .product-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .image-wrapper { height: 160px; }
+            header h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="navbar">
-        <div class="logo"><i class="fas fa-bolt"></i> BIA GADGETS</div>
-        <div class="search-bar">
-            <input type="text" id="globalSearchInput" placeholder="Search gadgets...">
-            <button id="globalSearchBtn"><i class="fas fa-search"></i></button>
-        </div>
-    </div>
+    <header>
+        <h1>BIA GADGETS</h1>
+        <p style="color: var(--text-sub)">Premium Quality. Innovative Technology.</p>
+    </header>
+
     <div class="categories">
-        <button class="cat-btn active" data-cat="phones">Phones</button>
-        <button class="cat-btn" data-cat="earbuds">Earbuds</button>
-        <button class="cat-btn" data-cat="powerbanks">Power Banks</button>
-        <button class="cat-btn" data-cat="laptops">Laptops</button>
-        <button class="cat-btn" data-cat="routers">Routers</button>
-        <button class="cat-btn" data-cat="audio">Audio/Headsets</button>
+        <button class="cat-btn active" onclick="showCat('phones', this)">Phones</button>
+        <button class="cat-btn" onclick="showCat('audio', this)">Earbuds & Audio</button>
+        <button class="cat-btn" onclick="showCat('power', this)">Power Banks</button>
+        <button class="cat-btn" onclick="showCat('work', this)">Workstations</button>
+        <button class="cat-btn" onclick="showCat('solar', this)">Solar & Battery</button>
     </div>
-</header>
 
-<main id="mainContent">
-    <div id="phones" class="products-section active-section"></div>
-    <div id="earbuds" class="products-section"></div>
-    <div id="powerbanks" class="products-section"></div>
-    <div id="laptops" class="products-section"></div>
-    <div id="routers" class="products-section"></div>
-    <div id="audio" class="products-section"></div>
-</main>
+    <div class="container" id="mainContent">
+        </div>
 
-<footer class="footer">
-    <p><i class="fab fa-whatsapp"></i> BIA Gadgets - Premium Tech Partner</p>
-</footer>
+    <script>
+        const storeData = {
+            phones: {
+                brands: ["iPhone", "Samsung", "Tecno", "Infinix", "Redmi", "Google Pixel"],
+                keyword: "smartphone",
+                tag: "Mobile"
+            },
+            audio: {
+                brands: ["Oraimo", "New Age", "Apple", "JBL", "Sony", "SoundPEATS"],
+                keyword: "earbuds",
+                tag: "Audio"
+            },
+            power: {
+                brands: ["Linco", "Oraimo", "New Age", "Anker", "Baseus"],
+                keyword: "powerbank",
+                tag: "Power"
+            },
+            work: {
+                brands: ["Apple MacBook", "HP Elitebook", "Dell Latitude", "Lenovo Yoga"],
+                keyword: "laptop",
+                tag: "Workstation"
+            },
+            solar: {
+                brands: ["Jackery", "EcoFlow", "Bluetti", "Renogy"],
+                keyword: "solarpanel",
+                tag: "Energy"
+            }
+        };
 
-<script>
-    // Targeted Image Categories (Using high-quality product keywords)
-    const imgKeywords = {
-        phones: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=400&auto=format&fit=crop",
-        earbuds: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=400&auto=format&fit=crop",
-        powerbanks: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=400&auto=format&fit=crop",
-        laptops: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=400&auto=format&fit=crop",
-        routers: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=400&auto=format&fit=crop",
-        audio: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&auto=format&fit=crop"
-    };
-
-    const brands = {
-        phones: ["iPhone 15 Pro", "Samsung S24 Ultra", "Tecno Camon 30", "Infinix Note 40", "Redmi Note 13"],
-        earbuds: ["Oraimo FreePods 4", "New Age Buds", "Apple AirPods Pro", "Samsung Buds 2"],
-        powerbanks: ["Linco 20k", "Oraimo Toast 10", "Anker PowerCore", "New Age Giant"],
-        laptops: ["HP EliteBook", "Dell Latitude", "Lenovo Yoga", "MacBook Air M3"],
-        routers: ["TP-Link Archer", "Tenda AC1200", "Huawei B535"],
-        audio: ["Sony WH-1000XM5", "JBL Live 660", "Bose QuietComfort"]
-    };
-
-    function render(cat, search = "") {
-        const container = document.getElementById(cat);
-        const list = brands[cat] || [];
-        const filtered = list.filter(name => name.toLowerCase().includes(search.toLowerCase()));
-
-        container.innerHTML = `
-            <div class="product-grid">
-                ${filtered.map((name, i) => `
-                    <div class="product-card">
-                        <div class="product-img">
-                            <img src="${imgKeywords[cat]}&sig=${i}" alt="${name}">
+        function generateStore() {
+            const container = document.getElementById('mainContent');
+            
+            Object.keys(storeData).forEach(cat => {
+                const section = document.createElement('div');
+                section.id = cat;
+                section.className = `products-section ${cat === 'phones' ? 'active-section' : ''}`;
+                
+                let gridHTML = `<div class="product-grid">`;
+                
+                // Generate 34 items per category as requested
+                for (let i = 1; i <= 34; i++) {
+                    const brand = storeData[cat].brands[i % storeData[cat].brands.length];
+                    const name = `${brand} Pro Series ${i + 100}`;
+                    // Pinterest tech-style image fetching
+                    const imgUrl = `https://loremflickr.com/400/400/${storeData[cat].keyword}?lock=${cat.length + i}`;
+                    
+                    gridHTML += `
+                        <div class="product-card">
+                            <div class="image-wrapper">
+                                <img src="${imgUrl}" alt="${name}" loading="lazy">
+                            </div>
+                            <div class="product-info">
+                                <span class="product-tag">${brand}</span>
+                                <h3 class="product-name">${name}</h3>
+                                <button class="order-btn" onclick="orderWA('${name}')">
+                                    <i class="fab fa-whatsapp"></i> ORDER NOW
+                                </button>
+                            </div>
                         </div>
-                        <div class="product-info">
-                            <div class="product-brand">${name.split(' ')[0]}</div>
-                            <div class="product-name">${name}</div>
-                            <div class="product-specs">High-performance ${cat.slice(0,-1)} with premium warranty.</div>
-                            <button class="order-btn" onclick="sendWA('${name}')">
-                                <i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP
-                            </button>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>`;
-    }
+                    `;
+                }
+                
+                gridHTML += `</div>`;
+                section.innerHTML = gridHTML;
+                container.appendChild(section);
+            });
+        }
 
-    function sendWA(item) {
-        const phone = "2349121843325";
-        const msg = encodeURIComponent(`Hello BIA Gadgets, I want to order: ${item}. Please send price and delivery details.`);
-        window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-    }
-
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.onclick = () => {
+        function showCat(id, btn) {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            
             document.querySelectorAll('.products-section').forEach(s => s.classList.remove('active-section'));
-            const cat = btn.dataset.cat;
-            document.getElementById(cat).classList.add('active-section');
-            render(cat);
-        };
-    });
+            document.getElementById(id).classList.add('active-section');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-    document.getElementById('globalSearchBtn').onclick = () => {
-        const active = document.querySelector('.cat-btn.active').dataset.cat;
-        render(active, document.getElementById('globalSearchInput').value);
-    };
+        function orderWA(product) {
+            const msg = encodeURIComponent(`Hello BIA Gadgets, I'm interested in ordering: ${product}. Please provide details.`);
+            window.open(`https://wa.me/2349121843325?text=${msg}`, '_blank');
+        }
 
-    // Initial load
-    render('phones');
-</script>
+        // Initialize
+        generateStore();
+    </script>
+
 </body>
 </html>
